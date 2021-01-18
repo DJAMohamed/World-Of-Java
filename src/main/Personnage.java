@@ -1,15 +1,9 @@
 package main;
+
 public class Personnage extends AbstractCombattant {
-	
-	int pointDeVie = 0;
-	int degat = 0;
-	String nom = null;
 	
 	public Personnage(int pointDeVie, int degat, String nom) {
 		super(nom, pointDeVie, degat);
-		this.pointDeVie = pointDeVie;
-		this.degat = degat;
-		this.nom = nom;
 	}
 	
 	public int getPointDeVie() {
