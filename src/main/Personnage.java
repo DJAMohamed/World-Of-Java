@@ -34,5 +34,5 @@ public class Personnage extends AbstractCombattant {
 	public String toString() {
 		return "Personnage [Points de vie = " + this.pointDeVie + ", dégâts = " + this.degat + ", nom = " + this.nom + "]";
 	}
-	
+
 }

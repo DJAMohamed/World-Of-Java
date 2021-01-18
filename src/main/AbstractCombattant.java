@@ -1,10 +1,10 @@
 package main;
 
-abstract class AbstractCombattant {
+abstract class AbstractCombattant implements ICombattant {
 	public String nom;
 	public int pointDeVie;
 	public int degat;
-	
+
 	public AbstractCombattant() {
 		super();
 	}
@@ -14,7 +14,7 @@ abstract class AbstractCombattant {
 		this.pointDeVie = pointDeVie;
 		this.degat = degat;
 	}
-	
+
 	public String getNom() {
 		return nom;
 	}
@@ -31,17 +31,30 @@ abstract class AbstractCombattant {
 		this.pointDeVie = pointDeVie;
 	}
 
-	public int getDegat() {
+	public int getDegats() {
 		return degat;
 	}
 
-	public void setDegat(int degat) {
+	public void setDegats(int degat) {
 		this.degat = degat;
+	}
+	
+//	Appeler la méthode Défense de l'adversaire passé en paramètre.
+//	Afficher un message pour notifier de l'attaque.
+	public void attaquer(ICombattant adversaire) {
+		System.out.println(adversaire.getNom() + " a été attaqué.");
+		adversaire.defendre(this.degat);
+	}
+
+//	Soustraire aux points de vie les dégâts passés en paramètre.
+	public void defendre(int degats) {
+		this.setPointDeVie(this.getPointDeVie() - degats);
 	}
 
 	@Override
 	public String toString() {
-		return "AbstractCombattant [Nom = " + this.nom + ", points de vie = " + this.pointDeVie + ", dégâts = " + this.degat + "]";
+		return "AbstractCombattant [Nom = " + this.nom + ", points de vie = " + this.pointDeVie + ", dégâts = "
+				+ this.degat + "]";
 	}
 
 }

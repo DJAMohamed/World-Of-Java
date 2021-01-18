@@ -50,15 +50,29 @@ class Monde {
 	 * @param monstre
 	 */
 	
-	public static void combat(Personnage personnage, Monstre monstre) {
-		// definir un boolean turn
+	public static void combat(ICombattant combattant1, ICombattant combattant2) {
 		boolean turn = true;
-		while ((personnage.getPointDeVie() > 0) && (monstre.getPointDeVie() > 0)) {/* verifier si les deux adversaires ont encore de la vie*/
-		    if (turn) personnage.pointDeVie -= monstre.getDegat();
-		    else monstre.degat -= personnage.getPointDeVie();
+		while ((combattant1.getPointDeVie() > 0) && (combattant2.getPointDeVie() > 0)) {
+		    if (turn) {
+		    	combattant2.attaquer(combattant1);		    	
+		    	System.out.println(combattant2.getNom() + " a attaqué " + combattant1.getNom() + " de : " + combattant2.getDegats());
+		    	System.out.println("Il reste " + combattant1.getPointDeVie() + " points de vie au " + combattant1.getNom());
+		    }
+		    else {
+		    	combattant1.attaquer(combattant2);		    	
+		    	System.out.println(combattant1.getNom() + " a attaqué " + combattant2.getNom() + " de : " + combattant1.getDegats());
+		    	System.out.println("Il reste " + combattant2.getPointDeVie() + " points de vie au " + combattant2.getNom());
+		    }
+		    turn = !turn;
+		}
+		if (combattant1.getPointDeVie() > 0) {
+			System.out.println("Le combattant 1 a gagné.");
+		}
+		else {
+			System.out.println("Le combattant 2 a gagné.");
 		}
 	}
-
+	
 	public static void afficherInformations() {
 		System.out.println("Voici le monde.");
 	}
