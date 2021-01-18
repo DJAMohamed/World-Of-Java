@@ -2,8 +2,11 @@ package main;
 
 public class Personnage extends AbstractCombattant {
 	
-	public Personnage(int pointDeVie, int degat, String nom) {
+	Classe classe;
+	
+	public Personnage(int pointDeVie, int degat, String nom, Classe classe) {
 		super(nom, pointDeVie, degat);
+		this.classe = classe;
 	}
 	
 	public int getPointDeVie() {

@@ -1,5 +1,7 @@
 package main;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -20,7 +22,12 @@ class Monde {
 		int pointDeVie = sc.nextInt();
 		System.out.println("Veuillez saisir le nombre de dégâts :");
 		int degat = sc.nextInt();
-		Personnage p = new Personnage(pointDeVie, degat, nom);
+		BasicAttaque ba1 = new BasicAttaque("Toto", "Titi", 2, 10.0);
+		BasicAttaque ba2 = new BasicAttaque("Toto", "Titi", 2, 10.0);
+		BasicAttaque ba3 = new BasicAttaque("Toto", "Titi", 2, 10.0);
+		BasicAttaque ba4 = new BasicAttaque("Toto", "Titi", 2, 10.0);
+		Classe c = new Classe(nom, List.of(ba1, ba2, ba3, ba4));
+		Personnage p = new Personnage(pointDeVie, degat, nom, c);
 		return p;
 	}
 
