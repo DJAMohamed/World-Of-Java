@@ -9,6 +9,7 @@ class Monde {
 	
 	public static String[] debutNom = new String[] {"Chat", "Chien", "Chaton"};
 	public static String[] finNom = new String[] {"méchant", "de feu", "de la mort"};
+	public static Scanner scanner = new Scanner(System.in);
 
 	public static Personnage personnageFactory() {
 		// Demander a l'utilisateur un nom de personnage
@@ -71,12 +72,13 @@ class Monde {
 		    	System.out.println("Il reste " + combattant2.getPointDeVie() + " points de vie au " + combattant2.getNom());
 		    }
 		    turn = !turn;
+		    scanner.nextLine();
 		}
 		if (combattant1.getPointDeVie() > 0) {
-			System.out.println("Le combattant 1 a gagné.");
+			System.out.println(combattant1.getNom() + " a gagné.");
 		}
 		else {
-			System.out.println("Le combattant 2 a gagné.");
+			System.out.println(combattant2.getNom() + " a gagné.");
 		}
 	}
 	
