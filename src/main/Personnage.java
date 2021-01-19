@@ -44,6 +44,14 @@ public class Personnage extends AbstractCombattant {
 		this.nom = nom;
 	}
 	
+	public Classe getClasse() {
+		return classe;
+	}
+
+	public void setClasse(Classe classe) {
+		this.classe = classe;
+	}
+
 	public String toString() {
 		return "Personnage [Points de vie = " + this.pointDeVie + ", dégâts = " + this.degat + ", nom = " + this.nom + "]";
 	}

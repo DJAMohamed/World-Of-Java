@@ -14,6 +14,33 @@ class Monde {
 	public static Scanner scanner = new Scanner(System.in);
 	static Map<String, Classe> dictionnaire = new HashMap<String, Classe>();
 	
+	static List<Monstre> listeDeMonstres = new ArrayList<Monstre>();
+	
+	public Monde() {
+		super();
+	}
+	
+	public static Groupe CreationGroupeMonstre(int nombreMonstre) {		
+		Groupe groupeDeMonstre = new Groupe();
+		for (int i = 0 ; i < nombreMonstre ; i++) {
+			Random random = new Random();
+			int index = random.nextInt(listeDeMonstres.size());
+			Monstre m = listeDeMonstres.get(index);
+			groupeDeMonstre.AddCombattant(m);
+		}
+		
+		return groupeDeMonstre;
+	}
+	
+	public static Groupe CreationGroupePersonnage(int nombrePersonnage) {
+		Groupe groupeDePersonnes = new Groupe();
+		for (int i = 0 ; i < nombrePersonnage ; i++) {
+			Personnage p = new Personnage(50, 5, " ", null);
+			groupeDePersonnes.AddCombattant(p);
+		}
+		return groupeDePersonnes;
+	}
+	
 	public static Personnage personnageFactory() {
         Personnage p = new Personnage("", 0, 0, classeFactory());
         System.out.println("Création d'un personnage : ");
@@ -141,6 +168,53 @@ class Monde {
         attaques.add(basicAttaqueFactory());
         c.setAttaques(attaques);
         return c;
+	}
+	
+	public static void genese() {
+		System.out.println("--------- Bonjour ---------");
+		System.out.println("Choisir une option :");
+		System.out.println("1: Lancer un combat 1 v 1.");
+		System.out.println("2: Lancer un combat de groupe.");
+		System.out.println("3: One vs World Hardcore Edition.");
+		System.out.println("4: Informations.");
+		System.out.println("----------------------------");
+		System.out.print("\n>>> ");
+		int choix = scanner.nextInt();
+		switch (choix) {
+		  case 1 :
+			  combat1v1(Monde.personnageFactory(), Monde.monstreFactory());
+			  break;
+		  case 2 :
+			  combatGroupe();
+			  break;
+		  case 3 :
+			  System.out.println("\nOne vs World Hardcore Edition.");
+			  break;
+		  case 4:
+			  System.out.println("\nInformations.");
+			  break;
+		}
+	}
+	
+	public static void combat1v1(Personnage p, Monstre m) {
+		combat(p, m);
+	}
+	
+	public static void combatGroupe() {
+		genese();
+		System.out.println("Saisir la taille des groupes (Personnages vs Monstres) :");
+		int tailleGroupes = scanner.nextInt();
+		System.out.println();
+		System.out.println("Début du combat : ");
+		System.out.println();
+		System.exit(1);
+		Groupe montres = CreationGroupeMonstre(tailleGroupes);
+		Groupe personnages = CreationGroupePersonnage(tailleGroupes);
+		for (int i = 0 ; i < tailleGroupes ; i++) {
+			for (int j = 0; j < tailleGroupes ; j++) {
+				combat(personnages.listeCombattants.get(i), listeDeMonstres.get(j));
+			}
+		}		
 	}
 	
 }
