@@ -1,5 +1,6 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,52 +15,76 @@ class Monde {
 	static Map<String, Classe> dictionnaire = new HashMap<String, Classe>();
 	
 	public static Personnage personnageFactory() {
-		// Demander a l'utilisateur un nom de personnage
-		// Creer un nouveau personnage en utilisant le constructeur avec tous ses params
-		// (dont le nom qui vient d'être choisi par l'utilisateur)
-		// Retourner l'instance du personnage
-		Scanner sc = new Scanner(System.in);		
-		System.out.println("Veuillez saisir le nom du personnage :");
-		String nom = sc.nextLine();
-		System.out.println("Veuillez saisir le nombre de points de vie :");
-		int pointDeVie = sc.nextInt();
-		System.out.println("Veuillez saisir le nombre de dégâts :");
-		int degat = sc.nextInt();
-		BasicAttaque ba1 = new BasicAttaque("Toto", "Titi", 2, 10.0);
-		BasicAttaque ba2 = new BasicAttaque("Toto", "Titi", 2, 10.0);
-		BasicAttaque ba3 = new BasicAttaque("Toto", "Titi", 2, 10.0);
-		BasicAttaque ba4 = new BasicAttaque("Toto", "Titi", 2, 10.0);
-		Classe c = new Classe(nom, List.of(ba1, ba2, ba3, ba4));
-		Personnage p = new Personnage(pointDeVie, degat, nom, c);
-		return p;
+        Personnage p = new Personnage("", 0, 0, classeFactory());
+        System.out.println("Création d'un personnage : ");
+        while (p.getNom().equals("")) {
+            System.out.println("Saisir un nom :");
+            p.setNom(scanner.next());
+        }
+         while (p.getDegats() == 0) {
+            System.out.println("Saisir les dégats :");
+            p.setDegats(scanner.nextInt());
+        }
+         
+        while (p.getPointDeVie() == 0) {
+            System.out.println("Saisir les points de vie :");
+            p.setPointDeVie(scanner.nextInt());
+        }
+        return p;
+//		//Personnage p = new Personnage(10, 2, "Bidouille", classeFactpry());
+//		// Demander a l'utilisateur un nom de personnage
+//		// Creer un nouveau personnage en utilisant le constructeur avec tous ses params
+//		// (dont le nom qui vient d'être choisi par l'utilisateur)
+//		// Retourner l'instance du personnage
+//		Scanner sc = new Scanner(System.in);		
+//		System.out.println("Veuillez saisir le nom du personnage :");
+//		String nom = sc.nextLine();
+//		System.out.println("Veuillez saisir le nombre de points de vie :");
+//		int pointDeVie = sc.nextInt();
+//		System.out.println("Veuillez saisir le nombre de dégâts :");
+//		int degat = sc.nextInt();
+//		System.out.println();
+//		System.out.println("Veuillez saisir le nom de la classe :");
+//		String nomClasse = sc.nextLine();
+//		
+//		
+//		
+//		System.out.println("Veuillez saisir le nom de l'attaque :");
+//		String nomAttaque = sc.nextLine();
+//		System.out.println("Veuillez saisir la description de l'attaque :");
+//		String descriptionAttaque = sc.nextLine();
+//		System.out.println("Veuillez saisir le nombre de dégâts :");
+//		int nombreDegats = sc.nextInt();
+//		System.out.println("Veuillez saisir la chance de toucher :");
+//		double chanceToucher = sc.nextDouble();
+//
+//		
+//		
+//		
+//		
+//		
+//		BasicAttaque ba1 = new BasicAttaque(nomAttaque, descriptionAttaque, nombreDegats, chanceToucher);
+////		BasicAttaque ba2 = new BasicAttaque("Toto", "Titi", 2, 10.0);
+////		BasicAttaque ba3 = new BasicAttaque("Toto", "Titi", 2, 10.0);
+////		BasicAttaque ba4 = new BasicAttaque("Toto", "Titi", 2, 10.0);
+//
+//		
+//		
+//		Classe c = new Classe(nomClasse, List.of(ba1));
+//		Personnage p = new Personnage(pointDeVie, degat, nom, c);
+//		return p;
 	}
 
-	
-	/**
-	 * Cette méthode sert à créer et à retourner un monstre. Ses caractéristiques sont demandées à l'utilisateur.
-	 * @return : un monstre.
-	 */
-
-	public static Monstre MonstreFactory() {
-		// Créer un String pour le nom de votre monstre.
-		// Créer une instance Monstre avec son constructeur complet.
-		// retourner le monstre.
-		String nom = debutNom[new Random().nextInt(debutNom.length)] + " " + finNom[new Random().nextInt(finNom.length)];
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Veuillez saisir le nombre de points de vie :");
-		int pointDeVie = sc.nextInt();
-		System.out.println("Veuillez saisir le nombre de dégâts :");
-		int degat = sc.nextInt();
-		System.out.println();
-		Monstre m = new Monstre(pointDeVie, degat, nom);
+	public static Monstre monstreFactory() {
+		Monstre m = new Monstre(50, 5, genererNom()); // Les dégâts et les points de vie peuvent être lus depuis la console.
 		return m;
 	}
 	
-	/**
-	 * Cette méthode permet de lancer le combat et designer le vainqueur. (Le combattant dont le solde de points restants est strictement positif.)
-	 * @param combattant1
-	 * @param combattant2
-	 */
+	public static String genererNom() {		
+		Random random = new Random();
+		String str = debutNom[random.nextInt(debutNom.length)] + " " + finNom[random.nextInt(finNom.length)];
+        return str;
+    }
 	
 	public static void combat(ICombattant combattant1, ICombattant combattant2) {
 		boolean turn = true;
@@ -89,7 +114,33 @@ class Monde {
 		System.out.println("Voici le monde.");
 	}
 	
-	public static Classe GetClasse(String nom) {
+	public static Classe getClasse(String nom) {
 		return dictionnaire.get(nom);
 	}
+	
+	public static void ajouterClasse(String key, Classe classe) {
+		dictionnaire.put(key, classe);
+	}
+	
+	public static BasicAttaque basicAttaqueFactory() {
+	       System.out.println("Création d'un attaque ---------");
+	        BasicAttaque a = new BasicAttaque("", "Ceci est une attaque", 10, 50);
+	        System.out.println("Nom :");
+	        a.setNom(scanner.next());
+	        return a;
+	}
+	
+	public static Classe classeFactory() {
+        System.out.println("Création d'une classe : ");
+        Classe c = new Classe();
+        System.out.println("Nom :");
+        c.setNom(scanner.next());
+        // Création d'une liste d'attaque pour la classe
+        List<IAttaque> attaques = new ArrayList<>();
+        attaques.add(basicAttaqueFactory());
+        attaques.add(basicAttaqueFactory());
+        c.setAttaques(attaques);
+        return c;
+	}
+	
 }

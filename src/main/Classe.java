@@ -41,12 +41,10 @@ class Classe {
 		int index = r.nextInt(attaques.size());
 		return attaques.get(index);
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Classe [Nom = " + this.nom + ", attaques = " + this.attaques + "]";
 	}
-	
-	
 	
 }

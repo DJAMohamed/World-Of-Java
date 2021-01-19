@@ -20,9 +20,6 @@ class BasicAttaque implements IAttaque {
 		this.chanceToucher = chanceToucher;
 	}
 	
-	/**
-	 * 
-	 */
 	public int lancerAttaque() {
 		Random r = new Random();
 		double nombre = r.nextDouble() * 100;

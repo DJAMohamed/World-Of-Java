@@ -9,12 +9,14 @@ public class Personnage extends AbstractCombattant {
 		this.classe = classe;
 	}
 	
-	@Override
+	public Personnage(String nom, int degats, int pointDeVie, Classe classe) {
+        super(nom, degats, pointDeVie);
+        this.classe = classe;
+    }
+	
 	public void attaquer(ICombattant adversaire) {
-		this.degat = this.classe.getAttaque().getDegats();
-//		adversaire.defendre(this.classe.getAttaque().lancerAttaque(this, adversaire));
 		adversaire.defendre(this.classe.getAttaque().lancerAttaque());
-		System.out.println(this.nom + ", vous avez causé " + this.getDegats() + " points de dégâts à " + adversaire.getNom() + ".");
+		System.out.println(this.nom + " a attaqué " + adversaire.getNom() + ".");
 		System.out.println("Points de vie du monstre : " + adversaire.getPointDeVie() + ".");
 	}
 	
@@ -41,8 +43,7 @@ public class Personnage extends AbstractCombattant {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
-
-	@Override
+	
 	public String toString() {
 		return "Personnage [Points de vie = " + this.pointDeVie + ", dégâts = " + this.degat + ", nom = " + this.nom + "]";
 	}

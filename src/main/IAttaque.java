@@ -1,8 +1,8 @@
 package main;
 
 interface IAttaque {
+	
     public int lancerAttaque();
-
     public String getNom();
     public int getDegats();
     public String getDescription();
@@ -10,6 +10,6 @@ interface IAttaque {
     public void setNom(String nom);
     public void setDegats(int degats);
     public void setDescription(String description);
-    // Chance de toucher doit être compris entre 0 et 100 obligatoirement.
-    public void setChanceToucher(double chanceToucher); 
+    public void setChanceToucher(double chanceToucher);
+    
 }
