@@ -1,7 +1,7 @@
 package main;
 
 interface IAttaque {
-    public int lancerAttaque(ICombattant lanceur, ICombattant cible);
+    public int lancerAttaque();
 
     public String getNom();
     public int getDegats();

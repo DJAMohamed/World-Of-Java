@@ -9,6 +9,15 @@ public class Personnage extends AbstractCombattant {
 		this.classe = classe;
 	}
 	
+	@Override
+	public void attaquer(ICombattant adversaire) {
+		this.degat = this.classe.getAttaque().getDegats();
+//		adversaire.defendre(this.classe.getAttaque().lancerAttaque(this, adversaire));
+		adversaire.defendre(this.classe.getAttaque().lancerAttaque());
+		System.out.println(this.nom + ", vous avez causé " + this.getDegats() + " points de dégâts à " + adversaire.getNom() + ".");
+		System.out.println("Points de vie du monstre : " + adversaire.getPointDeVie() + ".");
+	}
+	
 	public int getPointDeVie() {
 		return pointDeVie;
 	}

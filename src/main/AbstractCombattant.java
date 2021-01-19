@@ -42,10 +42,10 @@ abstract class AbstractCombattant implements ICombattant {
 //	Appeler la méthode Défense de l'adversaire passé en paramètre.
 //	Afficher un message pour notifier de l'attaque.
 	public void attaquer(ICombattant adversaire) {
-		System.out.println(adversaire.getNom() + " a été attaqué.");
+		System.out.println(adversaire.getNom() + " a été attaqué.");		
 		adversaire.defendre(this.degat);
 	}
-
+	
 //	Soustraire aux points de vie les dégâts passés en paramètre.
 	public void defendre(int degats) {
 		this.setPointDeVie(this.getPointDeVie() - degats);

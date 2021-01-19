@@ -9,7 +9,7 @@ class Classe {
 	public String nom;
 	
 	public List<IAttaque> attaques =  new ArrayList<IAttaque>();
-
+	
 	public Classe() {
 		super();
 	}
@@ -41,5 +41,12 @@ class Classe {
 		int index = r.nextInt(attaques.size());
 		return attaques.get(index);
 	}
+
+	@Override
+	public String toString() {
+		return "Classe [Nom = " + this.nom + ", attaques = " + this.attaques + "]";
+	}
+	
+	
 	
 }

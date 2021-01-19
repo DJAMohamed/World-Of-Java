@@ -8,6 +8,10 @@ class BasicAttaque implements IAttaque {
 	public String description;
 	public int degats;
 	public double chanceToucher;
+	
+	public BasicAttaque() {
+		super();
+	}
 
 	public BasicAttaque(String nom, String description, int degats, double chanceToucher) {
 		this.nom = nom;
@@ -16,13 +20,16 @@ class BasicAttaque implements IAttaque {
 		this.chanceToucher = chanceToucher;
 	}
 	
-	public int lancerAttaque(ICombattant lanceur, ICombattant cible) {
+	/**
+	 * 
+	 */
+	public int lancerAttaque() {
 		Random r = new Random();
-		int n = r.nextInt(101);
-		if (n < this.getChanceToucher()) {
-			return lanceur.getDegats();
+		double nombre = r.nextDouble() * 100;
+		if (nombre < this.getChanceToucher()) {
+			return this.getDegats();
 		} else {
-			System.out.println("Échec...");
+			System.out.println("L'attaque a échoué...\n");
 			return 0;
 		}
 	}
@@ -63,7 +70,18 @@ class BasicAttaque implements IAttaque {
 
 	@Override
 	public void setChanceToucher(double chanceToucher) {
-		this.chanceToucher = chanceToucher;
+		if ((chanceToucher >= 0) && (chanceToucher <= 0)) {
+			this.chanceToucher = chanceToucher;
+		}
+		else {
+			System.out.println("La chance de toucher doit appartenir à l'intervalle [0, 100]");
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "Basic Attaque [Nom = " + this.nom + ", description = " + this.description + ", dégâts = " + this.degats + ", chance de toucher = "
+				+ this.chanceToucher + "]";
 	}
 
 }
