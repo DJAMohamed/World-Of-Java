@@ -21,11 +21,18 @@ public class Groupe extends AbstractCombattant {
 		listeCombattants.add(combattant);
 	}
 
+	/**
+	 * Cette méthode parcourt la liste des combattants du groupe et vérifie si ils sont tous morts
+	 * retourne "false" si tous les combattants ne sont pas mort
+	 * retourne "true" si tous les combattants sont morts
+	 * @return
+	 */
 	public boolean EstMort() {
 		boolean sontTousMorts = false;
 		int nombreDeMorts = 0;
-		for (int i = 0; i < listeCombattants.size(); i++) {
-			if (listeCombattants.get(i).getPointDeVie() <= 0) {
+		// Pour chaque combattant du groupe, si le combattant est mort : nombreMorts + 1
+		for (ICombattant combattant : listeCombattants) {
+			if (combattant.getPointDeVie() <= 0) {
 				nombreDeMorts++;
 			}
 		}
@@ -35,7 +42,7 @@ public class Groupe extends AbstractCombattant {
 		return sontTousMorts;
 	}
 
-	public void attaquer(List<ICombattant> adversaires) {
+	public void attaquer(Groupe adversaires) {
 		Random random = new Random();
 		int index = random.nextInt(this.listeCombattants.size());
 		int degats = 0;
@@ -51,13 +58,15 @@ public class Groupe extends AbstractCombattant {
 			ICombattant ic = this.listeCombattants.get(index);
 			degats = ic.getDegats();
 		}
-		this.defendre(degats);
+		System.out.println(this.listeCombattants.get(index).getNom() + " attaque !");
+		adversaires.defendre(degats);
 	}
 
 	public void defendre(int degats) {
 		Random random = new Random();
 		int nb = random.nextInt(this.listeCombattants.size());
-		listeCombattants.get(nb).setPointDeVie(listeCombattants.get(nb).getPointDeVie() - degats);
+		System.out.println(this.listeCombattants.get(nb).getNom() + " subit " + degats + " dégats");
+		this.listeCombattants.get(nb).setPointDeVie(listeCombattants.get(nb).getPointDeVie() - degats);
 	}
 
 }

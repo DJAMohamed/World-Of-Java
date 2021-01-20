@@ -12,33 +12,41 @@ class Monde {
 	public static String[] debutNom = new String[] {"Chat", "Chien", "Chaton"};
 	public static String[] finNom = new String[] {"méchant", "de feu", "de la mort"};
 	public static Scanner scanner = new Scanner(System.in);
-	static Map<String, Classe> dictionnaire = new HashMap<String, Classe>();
+	private static Map<String, Classe> dictionnaire = new HashMap<String, Classe>();
 	
 	static List<Monstre> listeDeMonstres = new ArrayList<Monstre>();
+	static List<Personnage> listeDePersonnages = new ArrayList<Personnage>();
 	
 	public Monde() {
 		super();
 	}
 	
-	public static Groupe CreationGroupeMonstre(int nombreMonstre) {		
+	public static Groupe CreationGroupeMonstre(int nombreMonstre) {
+		System.out.println("\nCréation du groupe de monstres :\n");
 		Groupe groupeDeMonstre = new Groupe();
-		for (int i = 0 ; i < nombreMonstre ; i++) {
-			Random random = new Random();
-			int index = random.nextInt(listeDeMonstres.size());
-			Monstre m = listeDeMonstres.get(index);
-			groupeDeMonstre.AddCombattant(m);
+		for (int index = 0 ; index < nombreMonstre ; index++) {
+			Monstre monstre = new Monstre(50, 5, "Monstre " + (index + 1));
+			groupeDeMonstre.listeCombattants.add(monstre);
 		}
-		
+		for (int index = 0; index < groupeDeMonstre.listeCombattants.size() ; index++) System.out.println(groupeDeMonstre.listeCombattants.get(index));
 		return groupeDeMonstre;
 	}
 	
 	public static Groupe CreationGroupePersonnage(int nombrePersonnage) {
-		Groupe groupeDePersonnes = new Groupe();
-		for (int i = 0 ; i < nombrePersonnage ; i++) {
-			Personnage p = new Personnage(50, 5, " ", null);
-			groupeDePersonnes.AddCombattant(p);
+		System.out.println("\nCréation du groupe de personnages :\n");		
+		Groupe groupeDePersonnages = new Groupe();
+		for (int index = 0 ; index < nombrePersonnage ; index++) {		
+		    Classe c = new Classe();
+		    c.setNom("Classe " + (index + 1));    
+		    List<IAttaque> attaques = new ArrayList<>();
+		    attaques.add(basicAttaqueFactory());
+		    attaques.add(basicAttaqueFactory());
+		    c.setAttaques(attaques);			
+			Personnage personnage = new Personnage(50, 5, "Personnage " + (index + 1), c);
+			groupeDePersonnages.listeCombattants.add(personnage);
 		}
-		return groupeDePersonnes;
+		for (int index = 0; index < groupeDePersonnages.listeCombattants.size() ; index++) System.out.println(groupeDePersonnages.listeCombattants.get(index));
+		return groupeDePersonnages;
 	}
 	
 	public static Personnage personnageFactory() {
@@ -58,48 +66,6 @@ class Monde {
             p.setPointDeVie(scanner.nextInt());
         }
         return p;
-//		//Personnage p = new Personnage(10, 2, "Bidouille", classeFactpry());
-//		// Demander a l'utilisateur un nom de personnage
-//		// Creer un nouveau personnage en utilisant le constructeur avec tous ses params
-//		// (dont le nom qui vient d'être choisi par l'utilisateur)
-//		// Retourner l'instance du personnage
-//		Scanner sc = new Scanner(System.in);		
-//		System.out.println("Veuillez saisir le nom du personnage :");
-//		String nom = sc.nextLine();
-//		System.out.println("Veuillez saisir le nombre de points de vie :");
-//		int pointDeVie = sc.nextInt();
-//		System.out.println("Veuillez saisir le nombre de dégâts :");
-//		int degat = sc.nextInt();
-//		System.out.println();
-//		System.out.println("Veuillez saisir le nom de la classe :");
-//		String nomClasse = sc.nextLine();
-//		
-//		
-//		
-//		System.out.println("Veuillez saisir le nom de l'attaque :");
-//		String nomAttaque = sc.nextLine();
-//		System.out.println("Veuillez saisir la description de l'attaque :");
-//		String descriptionAttaque = sc.nextLine();
-//		System.out.println("Veuillez saisir le nombre de dégâts :");
-//		int nombreDegats = sc.nextInt();
-//		System.out.println("Veuillez saisir la chance de toucher :");
-//		double chanceToucher = sc.nextDouble();
-//
-//		
-//		
-//		
-//		
-//		
-//		BasicAttaque ba1 = new BasicAttaque(nomAttaque, descriptionAttaque, nombreDegats, chanceToucher);
-////		BasicAttaque ba2 = new BasicAttaque("Toto", "Titi", 2, 10.0);
-////		BasicAttaque ba3 = new BasicAttaque("Toto", "Titi", 2, 10.0);
-////		BasicAttaque ba4 = new BasicAttaque("Toto", "Titi", 2, 10.0);
-//
-//		
-//		
-//		Classe c = new Classe(nomClasse, List.of(ba1));
-//		Personnage p = new Personnage(pointDeVie, degat, nom, c);
-//		return p;
 	}
 
 	public static Monstre monstreFactory() {
@@ -182,6 +148,7 @@ class Monde {
 		int choix = scanner.nextInt();
 		switch (choix) {
 		  case 1 :
+			  System.out.println();
 			  combat1v1(Monde.personnageFactory(), Monde.monstreFactory());
 			  break;
 		  case 2 :
@@ -201,20 +168,28 @@ class Monde {
 	}
 	
 	public static void combatGroupe() {
-		genese();
-		System.out.println("Saisir la taille des groupes (Personnages vs Monstres) :");
+		boolean quiAttaque = true;
+		System.out.print("\nVeuillez saisir la taille des groupes [Personnages vs Monstres] : ");
 		int tailleGroupes = scanner.nextInt();
-		System.out.println();
-		System.out.println("Début du combat : ");
-		System.out.println();
-		System.exit(1);
-		Groupe montres = CreationGroupeMonstre(tailleGroupes);
+		Groupe monstres = CreationGroupeMonstre(tailleGroupes);
 		Groupe personnages = CreationGroupePersonnage(tailleGroupes);
-		for (int i = 0 ; i < tailleGroupes ; i++) {
-			for (int j = 0; j < tailleGroupes ; j++) {
-				combat(personnages.listeCombattants.get(i), listeDeMonstres.get(j));
+		System.out.println("\nDébut du combat :\n");
+		while ((!monstres.EstMort()) && (!personnages.EstMort())) {
+			if (quiAttaque) {
+				monstres.attaquer(personnages);
 			}
-		}		
+			else {
+				personnages.attaquer(monstres);
+			}
+			scanner.nextLine();
+			quiAttaque = !quiAttaque;
+		}
+		if (monstres.EstMort()) {
+			System.out.println("Le groupe de personnages a gagné.");
+		}
+		else {
+			System.out.println("Le groupe de monstres a gagné");
+		}	
 	}
 	
 }
