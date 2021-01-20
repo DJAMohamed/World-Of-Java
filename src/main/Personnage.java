@@ -15,9 +15,9 @@ public class Personnage extends AbstractCombattant {
     }
 	
 	public void attaquer(ICombattant adversaire) {
+		System.out.println(this.getNom() + " a attaqué " + adversaire.getNom() + ".");
+		System.out.println(this.getNom() + " a fait perdre " + this.classe.getAttaque().lancerAttaque() + " points à " + adversaire.getNom() + ".");
 		adversaire.defendre(this.classe.getAttaque().lancerAttaque());
-		System.out.println(this.nom + " a attaqué " + adversaire.getNom() + ".");
-		System.out.println("Points de vie du monstre : " + adversaire.getPointDeVie() + ".");
 	}
 	
 	public int getPointDeVie() {

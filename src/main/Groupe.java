@@ -6,7 +6,7 @@ import java.util.Random;
 
 public class Groupe extends AbstractCombattant {
 
-	public List<ICombattant> listeCombattants = new ArrayList<ICombattant>();
+	private List<ICombattant> listeCombattants = new ArrayList<>();
 
 	public Groupe() {
 		super();
@@ -16,9 +16,17 @@ public class Groupe extends AbstractCombattant {
 		super();
 		this.listeCombattants = listeCombattants;
 	}
+	
+	public List<ICombattant> getListeCombattants() {
+		return listeCombattants;
+	}
+
+	public void setListeCombattants(List<ICombattant> listeCombattants) {
+		this.listeCombattants = listeCombattants;
+	}
 
 	public void AddCombattant(ICombattant combattant) {
-		listeCombattants.add(combattant);
+		this.listeCombattants.add(combattant);
 	}
 
 	/**
@@ -27,46 +35,44 @@ public class Groupe extends AbstractCombattant {
 	 * retourne "true" si tous les combattants sont morts
 	 * @return
 	 */
-	public boolean EstMort() {
-		boolean sontTousMorts = false;
-		int nombreDeMorts = 0;
-		// Pour chaque combattant du groupe, si le combattant est mort : nombreMorts + 1
+	public boolean estMort() {
+		boolean sontTousMorts = true;
 		for (ICombattant combattant : listeCombattants) {
-			if (combattant.getPointDeVie() <= 0) {
-				nombreDeMorts++;
+			if (combattant.getPointDeVie() > 0) {
+				sontTousMorts = false;
 			}
-		}
-		if (nombreDeMorts == listeCombattants.size()) {
-			sontTousMorts = true;
 		}
 		return sontTousMorts;
 	}
-
+	
+	public List<ICombattant> getALiveCombttant() {
+		
+		List<ICombattant> aLiveCombattant = new ArrayList();
+		
+		for (int i = 0 ; i < this.listeCombattants.size() ; i++) {
+			if (!listeCombattants.get(i).estMort()) {
+				aLiveCombattant.add(listeCombattants.get(i));
+			}
+		}
+		return aLiveCombattant;
+	}
+	
 	public void attaquer(Groupe adversaires) {
 		Random random = new Random();
-		int index = random.nextInt(this.listeCombattants.size());
-		int degats = 0;
-		// Choisit un combattant, aléatoirement, dans cette liste.
-		// Si le combattant choisi pour attaquer est un personnage :
-		// - Lancer une attaque de sa classe.
-		// Sinon, retourner les dégâts du combattant.
-		if (this.listeCombattants.get(index) instanceof Personnage) {
-			Personnage ic = (Personnage) this.listeCombattants.get(index);
-			degats = ic.getClasse().getAttaque().lancerAttaque();
+		if (getALiveCombttant().size() != 0) {
+			ICombattant attaquant = getALiveCombttant().get(random.nextInt(getALiveCombttant().size()));
+			ICombattant adversaire = adversaires.getALiveCombttant().get(random.nextInt(adversaires.getALiveCombttant().size()));
+			if (attaquant instanceof Personnage) {
+				Personnage personnage = (Personnage) attaquant;
+				personnage.attaquer(adversaire);
+			}
+			else {
+				attaquant.attaquer(adversaire);
+			}
 		}
 		else {
-			ICombattant ic = this.listeCombattants.get(index);
-			degats = ic.getDegats();
+			System.out.println("Liste vide.");
 		}
-		System.out.println(this.listeCombattants.get(index).getNom() + " attaque !");
-		adversaires.defendre(degats);
-	}
-
-	public void defendre(int degats) {
-		Random random = new Random();
-		int nb = random.nextInt(this.listeCombattants.size());
-		System.out.println(this.listeCombattants.get(nb).getNom() + " subit " + degats + " dégats");
-		this.listeCombattants.get(nb).setPointDeVie(listeCombattants.get(nb).getPointDeVie() - degats);
 	}
 
 }

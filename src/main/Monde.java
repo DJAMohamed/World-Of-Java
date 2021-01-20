@@ -9,30 +9,30 @@ import java.util.Scanner;
 
 class Monde {
 	
-	public static String[] debutNom = new String[] {"Chat", "Chien", "Chaton"};
-	public static String[] finNom = new String[] {"méchant", "de feu", "de la mort"};
-	public static Scanner scanner = new Scanner(System.in);
+	private static String[] debutNom = new String[] {"Chat", "Chien", "Chaton"};
+	private static String[] finNom = new String[] {"méchant", "de feu", "de la mort"};
+	private static Scanner scanner = new Scanner(System.in);
 	private static Map<String, Classe> dictionnaire = new HashMap<String, Classe>();
 	
-	static List<Monstre> listeDeMonstres = new ArrayList<Monstre>();
-	static List<Personnage> listeDePersonnages = new ArrayList<Personnage>();
+	private static Groupe listeDeMonstres;
+	private static Groupe listeDePersonnages;
 	
 	public Monde() {
 		super();
 	}
 	
-	public static Groupe CreationGroupeMonstre(int nombreMonstre) {
+	public static Groupe groupeMonstreFactory(int nombreMonstre) {
 		System.out.println("\nCréation du groupe de monstres :\n");
 		Groupe groupeDeMonstre = new Groupe();
 		for (int index = 0 ; index < nombreMonstre ; index++) {
 			Monstre monstre = new Monstre(50, 5, "Monstre " + (index + 1));
-			groupeDeMonstre.listeCombattants.add(monstre);
+			groupeDeMonstre.getListeCombattants().add(monstre);
 		}
-		for (int index = 0; index < groupeDeMonstre.listeCombattants.size() ; index++) System.out.println(groupeDeMonstre.listeCombattants.get(index));
+		for (int index = 0; index < groupeDeMonstre.getListeCombattants().size() ; index++) System.out.println(groupeDeMonstre.getListeCombattants().get(index));
 		return groupeDeMonstre;
 	}
 	
-	public static Groupe CreationGroupePersonnage(int nombrePersonnage) {
+	public static Groupe groupePersonnageFactory(int nombrePersonnage) {
 		System.out.println("\nCréation du groupe de personnages :\n");		
 		Groupe groupeDePersonnages = new Groupe();
 		for (int index = 0 ; index < nombrePersonnage ; index++) {		
@@ -43,13 +43,13 @@ class Monde {
 		    attaques.add(basicAttaqueFactory());
 		    c.setAttaques(attaques);			
 			Personnage personnage = new Personnage(50, 5, "Personnage " + (index + 1), c);
-			groupeDePersonnages.listeCombattants.add(personnage);
+			groupeDePersonnages.getListeCombattants().add(personnage);
 		}
-		for (int index = 0; index < groupeDePersonnages.listeCombattants.size() ; index++) System.out.println(groupeDePersonnages.listeCombattants.get(index));
+		for (int index = 0; index < groupeDePersonnages.getListeCombattants().size() ; index++) System.out.println(groupeDePersonnages.getListeCombattants().get(index));
 		return groupeDePersonnages;
 	}
 	
-	public static Personnage personnageFactory() {
+	public static Personnage personnageFactory() { // Cette méthode est à modifier.
         Personnage p = new Personnage("", 0, 0, classeFactory());
         System.out.println("Création d'un personnage : ");
         while (p.getNom().equals("")) {
@@ -68,6 +68,11 @@ class Monde {
         return p;
 	}
 
+	public static Classe choisirClasse() {
+		return null; // Cette méthode est à écrire.
+		
+	}
+	
 	public static Monstre monstreFactory() {
 		Monstre m = new Monstre(50, 5, genererNom()); // Les dégâts et les points de vie peuvent être lus depuis la console.
 		return m;
@@ -93,7 +98,7 @@ class Monde {
 		    	System.out.println("Il reste " + combattant2.getPointDeVie() + " points de vie au " + combattant2.getNom() + ".");
 		    }
 		    turn = !turn;
-		    scanner.nextLine(); // Ca permet de marquer un temps d'arrêt. L'exécution reprend quand on appuie sur une touche.
+//		    scanner.nextLine(); // Ca permet de marquer un temps d'arrêt. L'exécution reprend quand on appuie sur une touche.
 		}
 		if (combattant1.getPointDeVie() > 0) {
 			System.out.println(combattant1.getNom() + " a gagné.");
@@ -116,11 +121,12 @@ class Monde {
 	}
 	
 	public static BasicAttaque basicAttaqueFactory() {
-	       System.out.println("Création d'un attaque ---------");
-	        BasicAttaque a = new BasicAttaque("", "Ceci est une attaque", 10, 50);
-	        System.out.println("Nom :");
-	        a.setNom(scanner.next());
-	        return a;
+		System.out.println("Création d'une attaque :\n");
+	    BasicAttaque a = new BasicAttaque("", "Ceci est une attaque", 10, 50);
+	    System.out.print("Nom de l'attaque : ");
+	    a.setNom(scanner.next());
+	    System.out.println();
+	    return a;
 	}
 	
 	public static Classe classeFactory() {
@@ -128,8 +134,7 @@ class Monde {
         Classe c = new Classe();
         System.out.println("Nom :");
         c.setNom(scanner.next());
-        // Création d'une liste d'attaque pour la classe
-        List<IAttaque> attaques = new ArrayList<>();
+         List<IAttaque> attaques = new ArrayList<>();
         attaques.add(basicAttaqueFactory());
         attaques.add(basicAttaqueFactory());
         c.setAttaques(attaques);
@@ -166,29 +171,32 @@ class Monde {
 	public static void combat1v1(Personnage p, Monstre m) {
 		combat(p, m);
 	}
-	
+		
 	public static void combatGroupe() {
+		int tour = 0;
 		boolean quiAttaque = true;
 		System.out.print("\nVeuillez saisir la taille des groupes [Personnages vs Monstres] : ");
 		int tailleGroupes = scanner.nextInt();
-		Groupe monstres = CreationGroupeMonstre(tailleGroupes);
-		Groupe personnages = CreationGroupePersonnage(tailleGroupes);
+		listeDeMonstres = groupeMonstreFactory(tailleGroupes);
+		listeDePersonnages = groupePersonnageFactory(tailleGroupes);
 		System.out.println("\nDébut du combat :\n");
-		while ((!monstres.EstMort()) && (!personnages.EstMort())) {
+		while ((!listeDeMonstres.estMort()) && (!listeDePersonnages.estMort())) {
+			tour++;
+			System.out.println("\n-------------------- Tour n° " + tour + " --------------------\n");
 			if (quiAttaque) {
-				monstres.attaquer(personnages);
+				listeDeMonstres.attaquer(listeDePersonnages);
 			}
 			else {
-				personnages.attaquer(monstres);
+				listeDePersonnages.attaquer(listeDeMonstres);
 			}
-			scanner.nextLine();
+//			scanner.nextLine();
 			quiAttaque = !quiAttaque;
 		}
-		if (monstres.EstMort()) {
-			System.out.println("Le groupe de personnages a gagné.");
+		if (listeDeMonstres.estMort()) {
+			System.out.println("\nLe groupe de personnages a gagné.");
 		}
 		else {
-			System.out.println("Le groupe de monstres a gagné");
+			System.out.println("\nLe groupe de monstres a gagné.");
 		}	
 	}
 	
